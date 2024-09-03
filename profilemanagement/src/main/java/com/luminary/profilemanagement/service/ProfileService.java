@@ -11,12 +11,10 @@ public class ProfileService {
     @Autowired
     private ProfileRepository profileRepository;
 
-    // Get Profile by User ID
     public Profile getProfileByUserId(Long userId) {
         return profileRepository.findByUserId(userId);
     }
 
-    // Update Profile
     public Profile updateProfile(Long userId, Profile newProfile) {
         Profile existingProfile = profileRepository.findByUserId(userId);
         if (existingProfile != null) {
@@ -28,5 +26,9 @@ public class ProfileService {
         } else {
             throw new RuntimeException("Profile not found");
         }
+    }
+
+    public Profile createProfile(Profile profile) {
+        return profileRepository.save(profile);
     }
 }
