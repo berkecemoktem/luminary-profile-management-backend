@@ -15,8 +15,8 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    //@Autowired
+    //private BCryptPasswordEncoder passwordEncoder;
 
     public Optional<User> getUserById(Long id) {
         return userRepository.findById(id);
@@ -40,11 +40,11 @@ public class UserService {
     public User updateUserPassword(Long id, String newPassword) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User not found"));
-        user.setPassword(passwordEncoder.encode(newPassword));
+        //user.setPassword(passwordEncoder.encode(newPassword));
+        user.setPassword(newPassword);
         return userRepository.save(user);
     }
 
-    // Reset Password (can be part of a more complex workflow involving tokens)
     public User resetPassword(Long id, String newPassword) {
         return updateUserPassword(id, newPassword);
     }
