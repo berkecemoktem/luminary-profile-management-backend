@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -27,5 +29,9 @@ public class User {
     @Column(nullable = false)
     private String password;
 
+    // New fields for password reset functionality
+    private String passwordResetToken;
+
+    private LocalDateTime tokenExpirationDate;
 
 }
