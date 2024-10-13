@@ -1,8 +1,11 @@
 package com.luminary.profilemanagement.rest;
 
+import com.luminary.profilemanagement.model.LoginMessage;
 import com.luminary.profilemanagement.model.User;
+import com.luminary.profilemanagement.model.dto.LoginDto;
 import com.luminary.profilemanagement.model.dto.RequestPasswordResetDto;
 import com.luminary.profilemanagement.model.dto.UserDto;
+import com.luminary.profilemanagement.service.LoginService;
 import com.luminary.profilemanagement.service.UserService;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -22,6 +25,26 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private LoginService loginService;
+
+    @PostMapping("/login")
+    public ResponseEntity<LoginMessage> login(@RequestBody LoginDto loginDto) {
+        LoginMessage response = loginService.loginUser(loginDto);
+        if (response.isSuccess()) {
+            return ResponseEntity.ok(response);
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+        }
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody @Valid UserDto userDto) {
+        String message = loginService.saveUser(userDto);
+        return ResponseEntity.status(HttpStatus.CREATED).body(message);
+    }
+
 
     // Retrieve User by ID
     @GetMapping("/{id}")

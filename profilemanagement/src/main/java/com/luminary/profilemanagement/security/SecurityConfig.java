@@ -54,10 +54,18 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth.anyRequest().permitAll()) // Disable authentication temporarily
+                .authorizeHttpRequests(auth -> {
+                    auth.requestMatchers("/error/**").permitAll();
+                    auth.requestMatchers("/api/auth/**").permitAll();
+                    auth.requestMatchers("api/users/requestPasswordReset");
+                    auth.requestMatchers("api/users/**").
+                    permitAll();
+                    auth.anyRequest().authenticated();
+                })
+                .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .httpBasic(Customizer.withDefaults())
                 .build();
     }
-
     @Bean
     public PasswordEncoder passwordEncoder() {
         return NoOpPasswordEncoder.getInstance();  // Allows plain text passwords
